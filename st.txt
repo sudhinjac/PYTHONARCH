@@ -1,0 +1,14 @@
+src/
+│
+├── domain/
+│   ├── model.py
+│   └── exceptions.py
+│
+├── application/
+│   ├── services.py
+│
+├── infrastructure/
+│   ├── repository.py
+│
+├── entrypoints/
+│   ├── api.py

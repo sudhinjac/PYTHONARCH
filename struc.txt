@@ -1,0 +1,30 @@
+project_root/
+│
+├── app/
+│   ├── main.py
+│   │
+│   ├── domain/
+│   │   ├── models.py
+│   │   ├── entities.py
+│   │   └── interfaces.py
+│   │
+│   ├── services/
+│   │   ├── signal_service.py
+│   │   └── backtest_service.py
+│   │
+│   ├── repositories/
+│   │   ├── stock_repository.py
+│   │
+│   ├── api/
+│   │   ├── routes.py
+│   │
+│   └── utils/
+│       ├── logger.py
+│
+├── tests/
+│   ├── test_services.py
+│   ├── test_models.py
+│
+├── requirements.txt
+├── pyproject.toml
+└── README.md
