@@ -1,0 +1,108 @@
+Run all tests
+pytest
+Run specific file
+pytest test_classroom.py
+Run specific test function
+pytest test_classroom.py::test_add_student
+Run specific test class
+pytest test_file.py::TestClass
+🔎 Output Control
+Verbose mode
+pytest -v
+
+Shows each test name.
+
+Very verbose
+pytest -vv
+Show print/log output
+pytest -s
+Stop on first failure
+pytest -x
+Stop after N failures
+pytest --maxfail=2
+🎯 Run Selected Tests
+By keyword match
+pytest -k "add"
+
+Runs tests with "add" in name.
+
+By marker
+pytest -m slow
+Exclude marker
+pytest -m "not slow"
+🧪 Logging
+Show logs live
+pytest --log-cli-level=INFO
+Debug level logs
+pytest --log-cli-level=DEBUG
+📊 HTML Report
+
+(Requires pip install pytest-html)
+
+pytest --html=report.html
+
+Self-contained:
+
+pytest --html=report.html --self-contained-html
+📈 Coverage Report
+
+(Requires pip install pytest-cov)
+
+Terminal coverage
+pytest --cov=.
+HTML coverage
+pytest --cov=. --cov-report=html
+
+Open:
+
+htmlcov/index.html
+🐞 Debugging
+Drop into debugger on failure
+pytest --pdb
+Show local variables in traceback
+pytest -l
+⚡ Performance & Control
+Show slowest tests
+pytest --durations=10
+Run tests in parallel
+
+(Requires pip install pytest-xdist)
+
+pytest -n auto
+🧩 Collect Only (Don’t Run)
+pytest --collect-only
+
+Shows what would run.
+
+🗂 Custom Config File (pytest.ini)
+[pytest]
+addopts = -v
+log_cli = true
+log_cli_level = INFO
+markers =
+    slow: marks tests as slow
+
+Now pytest runs with defaults every time.
+
+🧠 Real-World Daily Commands
+
+During development:
+
+pytest -v --log-cli-level=INFO
+
+Before pushing:
+
+pytest --cov=. --cov-report=html
+
+CI usage:
+
+pytest -x --maxfail=1
+🎯 If You Want To Be Professional
+
+Master these 5:
+
+pytest
+pytest -v
+pytest -k
+pytest -m
+pytest --cov=.
