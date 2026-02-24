@@ -1,0 +1,3 @@
+require_bgp_auth: true
+forbid_default_permit: true
+required_hostname_prefix: "DC-"
