@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CI/CD Fundamentals for Python Engineers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #eee;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 6px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-left: 5px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+
+<h1>CI/CD Fundamentals for Python Engineers</h1>
+
+<p>This guide explains Continuous Integration (CI) and Continuous Delivery/Deployment (CD) from basics to practical CLI usage.</p>
+
+<hr>
+
+<section>
+<h2>1. What is CI (Continuous Integration)?</h2>
+
+<p><strong>CI means automatically testing and verifying code whenever changes are pushed.</strong></p>
+
+<p>Instead of manually running tests, CI runs them automatically when you push code.</p>
+
+<h3>Basic CI Flow</h3>
+
+<ol>
+<li>Developer writes code</li>
+<li>Pushes to GitHub</li>
+<li>CI pipeline runs</li>
+<li>Dependencies install</li>
+<li>Tests execute</li>
+<li>Pass or Fail</li>
+</ol>
+
+<div class="highlight">
+CI ensures broken code never silently enters the main branch.
+</div>
+
+<h3>Basic CLI Commands</h3>
+
+<pre>
+git add .
+git commit -m "Add feature"
+git push
+</pre>
+
+Once pushed → GitHub Actions runs automatically.
+</section>
+
+<hr>
+
+<section>
+<h2>2. What is CD (Continuous Delivery)?</h2>
+
+<p>CD means safely preparing software for release after CI passes.</p>
+
+<p>CD includes:</p>
+
+<ul>
+<li>Packaging</li>
+<li>Versioning</li>
+<li>Releasing artifacts</li>
+<li>Deployment</li>
+<li>Rollback</li>
+</ul>
+</section>
+
+<hr>
+
+<section>
+<h2>3. Packaging Your Python Project</h2>
+
+<p>Create a <code>pyproject.toml</code> file:</p>
+
+<pre>
+[project]
+name = "network-validator"
+version = "0.1.0"
+description = "Network config validation tool"
+dependencies = ["pyyaml"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+</pre>
+
+<h3>Build Package</h3>
+
+<pre>
+pip install build
+python -m build
+</pre>
+
+<p>This creates a <code>dist/</code> folder containing installable files.</p>
+</section>
+
+<hr>
+
+<section>
+<h2>4. Versioning</h2>
+
+<p>Use Semantic Versioning:</p>
+
+<pre>
+MAJOR.MINOR.PATCH
+</pre>
+
+Examples:
+
+<ul>
+<li>0.1.0 → Initial version</li>
+<li>0.2.0 → New feature</li>
+<li>0.2.1 → Bug fix</li>
+<li>1.0.0 → Stable release</li>
+</ul>
+
+<p>Update version in <code>pyproject.toml</code>.</p>
+</section>
+
+<hr>
+
+<section>
+<h2>5. Releasing Artifacts</h2>
+
+<p>After building, you can:</p>
+
+<ul>
+<li>Upload to GitHub Releases</li>
+<li>Upload to PyPI</li>
+<li>Store internally</li>
+</ul>
+
+<h3>Example CI Step</h3>
+
+<pre>
+- name: Build package
+  run: python -m build
+
+- name: Upload artifact
+  uses: actions/upload-artifact@v3
+  with:
+    name: package
+    path: dist/
+</pre>
+</section>
+
+<hr>
+
+<section>
+<h2>6. Deploying to Staging</h2>
+
+<p>Staging = test environment before production.</p>
+
+<p>Example using SSH:</p>
+
+<pre>
+ssh user@staging-server
+pip install network-validator==0.2.0
+</pre>
+
+<p>Staging lets you validate before going live.</p>
+</section>
+
+<hr>
+
+<section>
+<h2>7. Deploying to Production</h2>
+
+<p>Production = real users.</p>
+
+<p>Example:</p>
+
+<pre>
+pip install network-validator==0.2.0
+</pre>
+
+<p>Or deploy Docker container:</p>
+
+<pre>
+docker build -t network-validator:0.2.0 .
+docker run network-validator:0.2.0
+</pre>
+</section>
+
+<hr>
+
+<section>
+<h2>8. Rollbacks</h2>
+
+<p>If a release fails:</p>
+
+<pre>
+pip install network-validator==0.1.0
+</pre>
+
+<p>Rollback means returning to last stable version quickly.</p>
+</section>
+
+<hr>
+
+<section>
+<h2>9. Environment Configuration</h2>
+
+<p>Never hardcode environment values.</p>
+
+<h3>Bad Practice</h3>
+
+<pre>
+DB_HOST = "prod-db.company.com"
+</pre>
+
+<h3>Correct Practice</h3>
+
+<pre>
+import os
+DB_HOST = os.getenv("DB_HOST")
+</pre>
+
+<p>Set environment variables:</p>
+
+<pre>
+export DB_HOST=staging-db
+</pre>
+
+Different environments → different configs.</p>
+</section>
+
+<hr>
+
+<section>
+<h2>10. Full Flow Summary</h2>
+
+<ol>
+<li>Write code</li>
+<li>Write tests</li>
+<li>Push to GitHub</li>
+<li>CI runs automatically</li>
+<li>Tests pass</li>
+<li>Build package</li>
+<li>Version release</li>
+<li>Deploy to staging</li>
+<li>Deploy to production</li>
+<li>Rollback if necessary</li>
+</ol>
+
+<div class="highlight">
+CI protects code quality.
+CD protects delivery safety.
+</div>
+</section>
+
+<hr>
+
+<section>
+<h2>Final Note</h2>
+
+<p>Do not over-engineer early.</p>
+
+<p>Master:</p>
+
+<ul>
+<li>Testing discipline</li>
+<li>Packaging basics</li>
+<li>Versioning clarity</li>
+<li>Clean separation of environments</li>
+</ul>
+
+<p>Advanced CD (Kubernetes, Helm, blue/green deploys) comes later.</p>
+
+</section>
+
+</body>
+</html>
